@@ -173,7 +173,8 @@
   }
 
   function generateOutput() {
-    const inputText = document.querySelector(".inputText").value.trim();
+    const inputText = document.querySelector(".inputText").value.trim().replaceAll(/[\r\n]+/g, "\n").replaceAll(/ +/g, " ").replaceAll(/ \n/g, "").replaceAll(/\n /g, "\n");
+    console.log(inputText);
     if (!inputText) return;
     names = inputText.split("\n");
     groups = generateGroups(names.length);
@@ -234,6 +235,7 @@
 
   // https://math.stackexchange.com/a/3094469
   function generateGroups(n) {
+    // If odd number of people generate a BYE week for one person each week
     if (n % 2 != 0) {
       n++;
       names.push("BYE");
@@ -258,6 +260,7 @@
     return shuffle(groups);
   }
 
+  // https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array
   function shuffle(array) {
     let currentIndex = array.length, randomIndex;
 
