@@ -141,12 +141,15 @@
 </body>
 
 <script type="text/javascript">
-  let day = Number(localStorage.day);
-  let names = JSON.parse(localStorage.names); // array of student names
-  let groups = JSON.parse(localStorage.groups); // 2D array of groups, where each group is a representation of all the pairs in a particular day
+  // https://stackoverflow.com/a/76645788
+  let day = Number(localStorage.day) || 1;
+  // array of student names
+  let names = (_ => { try { return JSON.parse(localStorage.names); } catch (err) { return null } })();
+  // 2D array of groups, where each group is a representation of all the pairs in a particular day
+  let groups = (_ => { try { return JSON.parse(localStorage.groups); } catch (err) { return null } })();
 
   // Check localStorage and set defaults if persistence not available
-  if (typeof day == "number" && !isNaN(day) && typeof names[0] == "string" && typeof groups[0][0][0] == "number") {
+  if (typeof day == "number" && !isNaN(day) && names && groups) {
     // If persistence is good update DOM to show
     updateOutput();
   } else {
