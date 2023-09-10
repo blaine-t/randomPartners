@@ -124,15 +124,33 @@
   let names; // array of student names
   let groups; // 2D array of groups, where each group is a representation of all the pairs in a particular day
 
+  function copy() {
+    if (!names || !groups) return;
+    const outputText = document.querySelector('.outputText').value;
+    navigator.clipboard.writeText(outputText);
+  }
+
+  function copyAll() {
+    if (!names || !groups) return;
+    const outputText = generateFullOutput();
+    navigator.clipboard.writeText(outputText);
+  }
+  
+  function download() {
+    // TODO
+  }
+
   function prevDay() {
-    // day-- with a lower bound of 1
-    day = day > 1 ? day - 1 : day;
+    if (!names || !groups) return;
+    // day-- with wrap around
+    day = day > 1 ? day - 1 : groups.length;
     updateOutput();
   }
 
   function nextDay() {
-    // day++ with an upper bound of groups.length
-    day = day < groups.length ? day + 1 : day;
+    if (!names || !groups) return;
+    // day++ with wrap around
+    day = modPlus1(day + 1, groups.length + 1);
     updateOutput();
   }
 
@@ -145,11 +163,16 @@
 
   function updateOutput() {
     document.querySelector('.day').textContent = `Day ${day}`;
+    const dayOutput = generateDayOutput(day);
+    document.querySelector('.outputText').value = dayOutput;
+  }
+
+  // generates the output string for a particular day d
+  function generateDayOutput(d) {
     // get the length of the longest name to align output later
     const longestNameLength = Math.max(...names.map((name) => name.length));
-    const outputGroup = groups[day - 1];
+    const outputGroup = groups[d - 1]; // convert the day to zero-indexing
     const outputLines = [];
-    console.log(groups)
     for (let i = 0; i < outputGroup.length; i++) {
       const pair = outputGroup[i];
       const name1 = names[pair[0]];
@@ -170,8 +193,18 @@
       (a, b) =>
         a.split(".")[0].split(" ").slice(-1)[0].localeCompare(b.split(".")[0].split(" ").slice(-1)[0])
     );
-    const output = outputLines.join("\n");
-    document.querySelector('.outputText').value = output;
+    return outputLines.join("\n");
+  }
+
+  // generates the full output string for all days at once
+  function generateFullOutput() {
+    let outputText = '';
+    for (let i = 1; i <= groups.length; i++) {
+      outputText += `******* Day ${i} *******\n\n`;
+      outputText += generateDayOutput(i);
+      if (i < groups.length) outputText += '\n\n';
+    }
+    return outputText;
   }
 
   // returns num % n, but adds 1 if it does overflow
