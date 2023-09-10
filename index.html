@@ -34,8 +34,19 @@
     .column {
       display: flex;
       flex-direction: column;
-      width: 25%;
       text-align: center;
+    }
+
+    .input {
+      width: 25%;
+    }
+
+    .output {
+      width: 40%;
+    }
+
+    .days {
+      width: 15%;
     }
 
     .title {
@@ -54,7 +65,7 @@
       border-bottom-left-radius: 1vw;
       border-bottom-right-radius: 1vw;
       resize: none;
-      font-size: 14px;
+      font-size: 12px;
       font-family: 'Courier New', Courier, monospace;
     }
 
@@ -63,7 +74,7 @@
     }
 
     .outputText {
-      height: 70vh;
+      height: 65vh;
     }
 
     .buttons {
@@ -73,7 +84,7 @@
 
     button {
       background-color: #d9d9d9;
-      font-size: 1.5em;
+      font-size: 1.25em;
       margin: 10px;
       margin-bottom: 0px;
       transition-duration: 0.3s;
@@ -105,7 +116,7 @@
     <h1 class="header">Random Partners</h1>
   </div>
   <div class="container">
-    <div class="column">
+    <div class="column input">
       <h1 class="title">Names</h1>
       <textarea class="inputText" type="text" spellcheck="false"></textarea>
       <button onclick="generateOutput()">Generate</button>
@@ -173,8 +184,13 @@
   }
 
   function generateOutput() {
-    const inputText = document.querySelector(".inputText").value.trim().replaceAll(/[\r\n]+/g, "\n").replaceAll(/ +/g, " ").replaceAll(/ \n/g, "").replaceAll(/\n /g, "\n");
-    console.log(inputText);
+    // Handle absolutely mangled inputs so they still show up fine to user
+    const inputText = document.querySelector(".inputText").value
+      .trim()
+      .replaceAll(/[\r\n]+/g, "\n")
+      .replaceAll(/ +/g, " ")
+      .replaceAll(/ \n/g, "")
+      .replaceAll(/\n /g, "\n");
     if (!inputText) return;
     names = inputText.split("\n");
     groups = generateGroups(names.length);
