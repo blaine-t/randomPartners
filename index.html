@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+</head>
+
+<body>
+  <div class="flex">
+    <div class="input">
+      <h1 class="title">Names</h1>
+      <input class="inputText" type="text">
+    </div>
+    <div class="output">
+      <h1 class="title">Output</h1>
+      <input class="outputText" type="text" readonly>
+      <div class="buttons">
+        <button onclick="copy()">Copy</button>
+        <button onclick="copyAll()">Copy All</button>
+        <button onclick="download()">Download</button>
+      </div>
+    </div>
+    <div class="days">
+      <h2 class="day">Day 0</h2>
+      <div class="buttons">
+        <button onclick="prevDay()">Prev</button>
+        <button onclick="nextDay()">Next</button>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>
