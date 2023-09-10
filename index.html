@@ -1,66 +1,104 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-  </head>
 
-  <body>
-    <div class="flex">
-      <div class="input">
-        <h1 class="title">Names</h1>
-        <input class="inputText" type="text" />
-      </div>
-      <div class="output">
-        <h1 class="title">Output</h1>
-        <input class="outputText" type="text" readonly />
-        <div class="buttons">
-          <button onclick="copy()">Copy</button>
-          <button onclick="copyAll()">Copy All</button>
-          <button onclick="download()">Download</button>
-        </div>
-      </div>
-      <div class="days">
-        <h2 class="day">Day 0</h2>
-        <div class="buttons">
-          <button onclick="prevDay()">Prev</button>
-          <button onclick="nextDay()">Next</button>
-        </div>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+</head>
+
+<body>
+  <div class="flex">
+    <div class="input">
+      <h1 class="title">Names</h1>
+      <textarea class="inputText" type="text"></textarea>
+    </div>
+    <div class="output">
+      <h1 class="title">Output</h1>
+      <textarea class="outputText" type="text" readonly></textarea>
+      <div class="buttons">
+        <button onclick="copy()">Copy</button>
+        <button onclick="copyAll()">Copy All</button>
+        <button onclick="download()">Download</button>
       </div>
     </div>
-  </body>
+    <div class="days">
+      <h2 class="day">Day 0</h2>
+      <div class="buttons">
+        <button onclick="prevDay()">Prev</button>
+        <button onclick="nextDay()">Next</button>
+      </div>
+    </div>
+  </div>
+</body>
 
-  <script type="text/javascript">
-    // returns num % n, but adds 1 if it does overflow
-    function modPlus1(num, n) {
-      return num >= n ? (num % n) + 1 : num;
+<script type="text/javascript">
+  let day = 1;
+  let names; // array of student names
+  let groups; // 2D array of groups, where each group is a representation of all the pairs in a particular day
+
+  function generateOutput() {
+    const inputText = document.querySelector(".inputText").value;
+    names = inputText.split("\n");
+    // get the length of the longest name to align output with periods
+    const longestNameLength = Math.max(...names.map((name) => name.length));
+    groups = generateGroups(names.length);
+    const outputGroup = groups[day - 1];
+    const outputLines = [];
+    for (let i = 0; i < outputGroup.length; i++) {
+      const pair = outputGroup[i];
+      const name1 = names[pair[0]];
+      const name2 = names[pair[1]];
+      // generate output lines for both orders of the pair
+      let line = `${name1}${".".repeat(
+        14 + longestNameLength - name1.length
+      )}${name2}`;
+      outputLines.push(line);
+      line = `${name2}${".".repeat(
+        14 + longestNameLength - name2.length
+      )}${name1}`;
+      outputLines.push(line);
+    }
+    // outputLines.sort(); // sort by first name of name1
+    // sort by last name of name1
+    outputLines.sort(
+      (a, b) =>
+        a.split(".")[0].split(" ").slice(-1)[0] >
+        b.split(".")[0].split(" ").slice(-1)[0]
+    );
+    const output = outputLines.join("\n");
+    document.querySelector('.outputText').value = output;
+  }
+
+  // returns num % n, but adds 1 if it does overflow
+  function modPlus1(num, n) {
+    return num >= n ? (num % n) + 1 : num;
+  }
+
+  function generateGroups(n) {
+    if (n % 2 != 0) {
+      console.error("can't generate groups for an odd class size yet");
+      return;
+    }
+    const groups = [];
+    for (let i = 1; i < n; i++) {
+      const group = [];
+      group.push([0, i]);
+      let current = i + 1;
+      let nodeGap = n - 1;
+
+      while (current < n / 2 + i) {
+        nodeGap -= 2;
+        const node1 = modPlus1(current);
+        const node2 = modPlus1(node1 + nodeGap);
+        group.push([node1, node2]);
+        current++;
+      }
+      groups.push(group);
     }
 
-    function generateGroups(n) {
-      if (n % 2 != 0) {
-        console.error("can't generate groups for an odd class size yet");
-        return;
-      }
-      const groups = [];
-      for (let i = 1; i < n; i++) {
-        const group = [];
-        group.push([0, i]);
-        let current = i + 1;
-        let nodeGap = n - 1;
+    return groups;
+  }
+</script>
 
-        while (current < n / 2 + i) {
-          nodeGap -= 2;
-          const node1 = modPlus1(current);
-          const node2 = modPlus1(node1 + nodeGap);
-          // console.log(`${i}: drawing line from ${node1} to ${node2}`);
-          group.push([node1, node2]);
-          current++;
-        }
-        groups.push(group);
-      }
-
-      return groups;
-    }
-  </script>
 </html>
