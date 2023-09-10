@@ -235,8 +235,8 @@
   // https://math.stackexchange.com/a/3094469
   function generateGroups(n) {
     if (n % 2 != 0) {
-      console.error("can't generate groups for an odd class size yet");
-      return;
+      n++;
+      names.push("BYE");
     }
     const groups = [];
     for (let i = 1; i < n; i++) {
