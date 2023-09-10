@@ -112,7 +112,7 @@
     </div>
     <div class="column output">
       <h1 class="title">Output</h1>
-      <textarea class="outputText" type="text" spellcheck="false" readonly></textarea>
+      <textarea class="outputText" type="text" spellcheck="false" autocomplete="off" readonly></textarea>
       <div class="buttons">
         <button onclick="copy()">Copy</button>
         <button onclick="copyAll()">Copy All</button>
@@ -147,7 +147,15 @@
   }
 
   function download() {
-    // TODO
+    if (!names || !groups) return;
+    const outputText = generateFullOutput();
+    const dl = document.createElement('a');
+    dl.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(outputText));
+    dl.setAttribute('download', 'partners.txt');
+    dl.style.display = 'none';
+    document.body.appendChild(dl);
+    dl.click();
+    document.body.removeChild(dl);
   }
 
   function prevDay() {
@@ -165,9 +173,11 @@
   }
 
   function generateOutput() {
-    const inputText = document.querySelector(".inputText").value;
+    const inputText = document.querySelector(".inputText").value.trim();
+    if (!inputText) return;
     names = inputText.split("\n");
     groups = generateGroups(names.length);
+    day = 1;
     updateOutput();
   }
 
@@ -222,6 +232,7 @@
     return num >= n ? (num % n) + 1 : num;
   }
 
+  // https://math.stackexchange.com/a/3094469
   function generateGroups(n) {
     if (n % 2 != 0) {
       console.error("can't generate groups for an odd class size yet");
