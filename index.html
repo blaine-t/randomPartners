@@ -141,9 +141,19 @@
 </body>
 
 <script type="text/javascript">
-  let day = 1;
-  let names; // array of student names
-  let groups; // 2D array of groups, where each group is a representation of all the pairs in a particular day
+  let day = Number(localStorage.day);
+  let names = JSON.parse(localStorage.names); // array of student names
+  let groups = JSON.parse(localStorage.groups); // 2D array of groups, where each group is a representation of all the pairs in a particular day
+
+  // Check localStorage and set defaults if persistence not available
+  if (typeof day == "number" && !isNaN(day) && typeof names[0] == "string" && typeof groups[0][0][0] == "number") {
+    // If persistence is good update DOM to show
+    updateOutput();
+  } else {
+    day = 1;
+    names = null;
+    groups = null;
+  }
 
   function copy() {
     if (!names || !groups) return;
@@ -174,6 +184,7 @@
     // day-- with wrap around
     day = day > 1 ? day - 1 : groups.length;
     updateOutput();
+    localStorage.day = day;
   }
 
   function nextDay() {
@@ -181,6 +192,7 @@
     // day++ with wrap around
     day = modPlus1(day + 1, groups.length + 1);
     updateOutput();
+    localStorage.day = day;
   }
 
   function generateOutput() {
@@ -193,8 +205,15 @@
       .replaceAll(/\n /g, "\n");
     if (!inputText) return;
     names = inputText.split("\n");
+    // If odd number of people generate a BYE week for one person each week
+    if (names.length % 2 != 0) {
+      names.push("BYE");
+    }
+    localStorage.names = JSON.stringify(names);
     groups = generateGroups(names.length);
+    localStorage.groups = JSON.stringify(groups);
     day = 1;
+    localStorage.day = day;
     updateOutput();
   }
 
@@ -251,11 +270,6 @@
 
   // https://math.stackexchange.com/a/3094469
   function generateGroups(n) {
-    // If odd number of people generate a BYE week for one person each week
-    if (n % 2 != 0) {
-      n++;
-      names.push("BYE");
-    }
     const groups = [];
     for (let i = 1; i < n; i++) {
       const group = [];
