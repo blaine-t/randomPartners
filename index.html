@@ -110,7 +110,7 @@
       </div>
     </div>
     <div class="column days">
-      <h2 class="day">Day 0</h2>
+      <h2 class="day">Day 1</h2>
       <div>
         <button onclick="prevDay()">Prev</button>
         <button onclick="nextDay()">Next</button>
@@ -124,14 +124,32 @@
   let names; // array of student names
   let groups; // 2D array of groups, where each group is a representation of all the pairs in a particular day
 
+  function prevDay() {
+    // day-- with a lower bound of 1
+    day = day > 1 ? day - 1 : day;
+    updateOutput();
+  }
+
+  function nextDay() {
+    // day++ with an upper bound of groups.length
+    day = day < groups.length ? day + 1 : day;
+    updateOutput();
+  }
+
   function generateOutput() {
     const inputText = document.querySelector(".inputText").value;
     names = inputText.split("\n");
-    // get the length of the longest name to align output with periods
-    const longestNameLength = Math.max(...names.map((name) => name.length));
     groups = generateGroups(names.length);
+    updateOutput();
+  }
+
+  function updateOutput() {
+    document.querySelector('.day').textContent = `Day ${day}`;
+    // get the length of the longest name to align output later
+    const longestNameLength = Math.max(...names.map((name) => name.length));
     const outputGroup = groups[day - 1];
     const outputLines = [];
+    console.log(groups)
     for (let i = 0; i < outputGroup.length; i++) {
       const pair = outputGroup[i];
       const name1 = names[pair[0]];
@@ -175,8 +193,8 @@
 
       while (current < n / 2 + i) {
         nodeGap -= 2;
-        const node1 = modPlus1(current);
-        const node2 = modPlus1(node1 + nodeGap);
+        const node1 = modPlus1(current, n);
+        const node2 = modPlus1(node1 + nodeGap, n);
         group.push([node1, node2]);
         current++;
       }
