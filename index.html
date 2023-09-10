@@ -3,28 +3,115 @@
 
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+  <style>
+    body {
+      background-color: #efefef;
+      font-family: Helvetica sans-serif;
+    }
+
+    body * {
+      font-family: Helvetica, sans-serif;
+    }
+
+    .container {
+      display: flex;
+      justify-content: space-around;
+    }
+
+    .column {
+      display: flex;
+      flex-direction: column;
+      width: 25%;
+      text-align: center;
+    }
+
+    .title {
+      background-color: #d9d9d9;
+      margin-top: 0px;
+      margin-bottom: 0px;
+      border: 2px;
+      border-style: solid;
+      border-top-left-radius: 1vw;
+      border-top-right-radius: 1vw;
+    }
+
+    textarea {
+      border: 2px;
+      border-style: solid;
+      border-bottom-left-radius: 1vw;
+      border-bottom-right-radius: 1vw;
+      resize: none;
+      font-size: 14px;
+      font-family: 'Courier New', Courier, monospace;
+    }
+
+    .inputText {
+      height: 50vh;
+    }
+
+    .outputText {
+      height: 70vh;
+    }
+
+    .buttons {
+      margin-top: 2vh;
+      margin-bottom: 0px;
+    }
+
+    button {
+      background-color: #d9d9d9;
+      font-size: 1.5em;
+      margin: 10px;
+      margin-bottom: 0px;
+      transition-duration: 0.3s;
+      cursor: pointer;
+      color: #434343;
+      border-radius: 5px;
+      padding: 10px;
+      border: 2px solid grey;
+      font-weight: normal;
+      transition-duration: 0.3s;
+      user-select: none;
+    }
+
+    button:hover {
+      background-color: #BBB;
+    }
+
+    .header {
+      font-size: 2.5em;
+      font-style: italic;
+      color: #e8413c;
+      font-weight: 800;
+    }
+  </style>
 </head>
 
 <body>
-  <div class="flex">
-    <div class="input">
+  <div class="headerContainer">
+    <h1 class="header">Random Partners</h1>
+  </div>
+  <div class="container">
+    <div class="column">
       <h1 class="title">Names</h1>
-      <textarea class="inputText" type="text"></textarea>
+      <textarea class="inputText" type="text" spellcheck="false"></textarea>
+      <button onclick="generateOutput()">Generate</button>
     </div>
-    <div class="output">
+    <div class="column output">
       <h1 class="title">Output</h1>
-      <textarea class="outputText" type="text" readonly></textarea>
+      <textarea class="outputText" type="text" spellcheck="false" readonly></textarea>
       <div class="buttons">
         <button onclick="copy()">Copy</button>
         <button onclick="copyAll()">Copy All</button>
         <button onclick="download()">Download</button>
       </div>
     </div>
-    <div class="days">
+    <div class="column days">
       <h2 class="day">Day 0</h2>
-      <div class="buttons">
+      <div>
         <button onclick="prevDay()">Prev</button>
         <button onclick="nextDay()">Next</button>
       </div>
