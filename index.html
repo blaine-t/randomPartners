@@ -150,8 +150,7 @@
     // sort by last name of name1
     outputLines.sort(
       (a, b) =>
-        a.split(".")[0].split(" ").slice(-1)[0] >
-        b.split(".")[0].split(" ").slice(-1)[0]
+        a.split(".")[0].split(" ").slice(-1)[0].localeCompare(b.split(".")[0].split(" ").slice(-1)[0])
     );
     const output = outputLines.join("\n");
     document.querySelector('.outputText').value = output;
